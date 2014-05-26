@@ -4,8 +4,8 @@ __author__ = 'Jayin Ton'
 
 import requests
 from bs4 import BeautifulSoup
-import json
-import utils
+import _
+
 
 def _get_tag_a(tag):
     if tag.has_attr('href') and tag.has_attr('target'):
@@ -19,8 +19,8 @@ def _wyu_news(page):
     url = 'http://www.wyu.cn/news/default.asp'
     params = {'page': page}
     r = requests.get(url, params=params)
-    encoding = utils.get_charset(r.content)
-    return r.content.decode(encoding)  #Binary Response Content
+    encoding = _.get_charset(r.content)
+    return r.content.decode(encoding)
 
 
 def get_wyu_news(page):
@@ -31,15 +31,15 @@ def get_wyu_news(page):
         return response
     res = _wyu_news(page)
     soup = BeautifulSoup(res, from_encoding='utf-8')
-    tds = soup.find_all(_get_tag_a)
+    tag_a = soup.find_all(_get_tag_a)
     result = []
-    for item in tds:
+    for item in tag_a:
         result.append({
             'url': ''.join(('http://www.wyu.cn/news/', item.attrs['href']))
             , 'title': item.string
         })
     response['result'] = result
-    return json.dumps(response)
+    return _.to_json_string(response)
 
 
 if __name__ == '__main__':
