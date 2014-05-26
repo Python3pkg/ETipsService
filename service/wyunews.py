@@ -11,7 +11,7 @@ regex = r'charset=([a-zA-Z0-9-]+)?'
 pattern = re.compile(regex, re.IGNORECASE)
 
 
-def get_tag_a(tag):
+def _get_tag_a(tag):
     if tag.has_attr('href') and tag.has_attr('target'):
         if 'http://' in tag.attrs['href']:
             return False
@@ -19,7 +19,7 @@ def get_tag_a(tag):
     return False
 
 
-def wyu_news(page):
+def _wyu_news(page):
     url = 'http://www.wyu.cn/news/default.asp'
     params = {'page': page}
     r = requests.get(url, params=params)
@@ -33,9 +33,9 @@ def get_wyu_news(page):
     }
     if page <= 0:
         return response
-    res = wyu_news(page)
+    res = _wyu_news(page)
     soup = BeautifulSoup(res, from_encoding='utf-8')
-    tds = soup.find_all(get_tag_a)
+    tds = soup.find_all(_get_tag_a)
     result = []
     for item in tds:
         result.append({
@@ -46,5 +46,5 @@ def get_wyu_news(page):
     return json.dumps(response)
 
 
-# if __name__ == '__main__':
-#     print (get_wyu_news(1))
+if __name__ == '__main__':
+    print (get_wyu_news(1))
