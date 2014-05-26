@@ -3,13 +3,9 @@
 __author__ = 'Jayin Ton'
 
 import requests
-import re
 from bs4 import BeautifulSoup
 import json
-
-regex = r'charset=([a-zA-Z0-9-]+)?'
-pattern = re.compile(regex, re.IGNORECASE)
-
+import utils
 
 def _get_tag_a(tag):
     if tag.has_attr('href') and tag.has_attr('target'):
@@ -23,7 +19,7 @@ def _wyu_news(page):
     url = 'http://www.wyu.cn/news/default.asp'
     params = {'page': page}
     r = requests.get(url, params=params)
-    encoding = pattern.findall(r.content)[0]
+    encoding = utils.get_charset(r.content)
     return r.content.decode(encoding)  #Binary Response Content
 
 
