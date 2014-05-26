@@ -11,7 +11,7 @@ regex = r'charset=([a-zA-Z0-9-]+)?'
 pattern = re.compile(regex, re.IGNORECASE)
 
 
-def get_a(tag):
+def get_tag_a(tag):
     if tag.has_attr('href') and tag.has_attr('target'):
         if 'http://' in tag.attrs['href']:
             return False
@@ -27,7 +27,7 @@ def wyu_news(page):
     return r.content.decode(encoding)  #Binary Response Content
 
 
-def main(page):
+def get_wyu_news(page):
     response = {
         'result': []
     }
@@ -35,7 +35,7 @@ def main(page):
         return response
     res = wyu_news(page)
     soup = BeautifulSoup(res, from_encoding='utf-8')
-    tds = soup.find_all(get_a)
+    tds = soup.find_all(get_tag_a)
     result = []
     for item in tds:
         result.append({
@@ -46,5 +46,5 @@ def main(page):
     return json.dumps(response)
 
 
-if __name__ == '__main__':
-    print (main(1))
+# if __name__ == '__main__':
+#     print (get_wyu_news(1))
