@@ -13,6 +13,7 @@ _headers = None
 class subSystem(object):
     def __init__(self, userid, userpsw):
         self._headers = None
+        self._cookies = None
         self._userid = userid
         self._userpsw = userpsw
 
@@ -26,14 +27,12 @@ class subSystem(object):
         return r.cookies
 
     def login(self):
-        cookies = self._get_rndnum_cookies()
+        self._cookies = self._get_rndnum_cookies()
+        # print self._cookies
         UserCode, UserPwd = self._userid, self._userpsw
-        Validate = cookies['LogonNumber']
+        Validate = self._cookies['LogonNumber']
         Submit = "%CC%E1+%BD%BB"
-        headers = {'Referer': 'http://jwc.wyu.edu.cn/student/body.htm',
-                   "Cookie": 'ASPSESSIONIDSCRRDTBQ' + "=" + cookies['ASPSESSIONIDSCRRDTBQ'] + ";LogonNumber=" +
-                             cookies[
-                                 'LogonNumber']}
+        headers = {'Referer': 'http://jwc.wyu.edu.cn/student/body.htm'}
         #save header
         self._headers = headers
         data = {
@@ -43,18 +42,55 @@ class subSystem(object):
             "Submit": Submit,
 
         }
-        r = requests.post("http://jwc.wyu.edu.cn/student/logon.asp", data=data, headers=headers)
-        # print r.content.decode(_.get_charset(r.content))
+        r = requests.post("http://jwc.wyu.edu.cn/student/logon.asp", data=data, headers=headers, cookies=self._cookies)
+        #print r.content.decode(_.get_charset(r.content))
         return True if r.status_code == 200 else False
 
     def _get_course_html(self):
-        r = requests.get("http://jwc.wyu.edu.cn/student/f3.asp", headers=self._headers)
-        print r.content.decode(_.get_charset(r.content))
+        self._headers['Referer'] = "http://jwc.wyu.edu.cn/student/menu.asp"
+        r = requests.get("http://jwc.wyu.edu.cn/student/f3.asp", headers=self._headers, cookies=self._cookies)
+        return r.content.decode(_.get_charset(r.content))
 
+    def get_course(self):
+        html = self._get_course_html()
+        soup = BeautifulSoup(markup=html)
+        #tbodys[0]为学生信息，tbodys[1]课表，tbodys[2]为课程详情
+        tbodys = soup.find_all(name='tbody')
+        result = {
+            'course': []
+        }
+        for x in tbodys[1].select('td[valign=top]'):
+            # print x.getText(separator=u" ")
+            texts = x.getText(separator=u" ").split(u" ")
+            #have no lesson
+            if len(texts) == 1:
+                lesson = {
+                    'name': u"",
+                    'time': u"",
+                    'address': u"",
+                    'teacher': u""
+                }
+            else:
+                lesson = {
+                    'name': texts[0],
+                    'time': texts[1],
+                    'address': texts[2].split(u" ")[0],
+                    'teacher': texts[2].split(u" ")[1]
+                }
+            # print lesson
+            result['course'].append(lesson)
+
+        return _.to_json_string(result)
 
     def _get_score_html(self):
         self._headers['Referer'] = "http://jwc.wyu.edu.cn/student/menu.asp"
-        r = requests.get("http://jwc.wyu.edu.cn/student/f4_myscore11.asp", headers=self._headers, allow_redirects=False)
+        r = requests.get("http://jwc.wyu.edu.cn/student/f4_myscore11.asp", headers=self._headers, allow_redirects=False,
+                         cookies=self._cookies)
+        print r.content.decode(_.get_charset(r.content))
+
+
+    def _get_stu_info(self):
+        r = requests.get("http://jwc.wyu.edu.cn/student/f1.asp", headers=self._headers, cookies=self._cookies)
         print r.content.decode(_.get_charset(r.content))
 
 
@@ -62,5 +98,8 @@ if __name__ == '__main__':
     u = subSystem("3112002722", '931127')
     print u.login()
     if u.login():
-        # u._get_course_html()
-        u._get_score_html()
+        print "****************Login success!**************"
+        print "****************course list**************"
+        print u.get_course()
+        #u._get_score_html()
+        #u._get_stu_info()
