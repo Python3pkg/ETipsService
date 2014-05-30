@@ -5,6 +5,7 @@ __author__ = 'Jayin Ton'
 import re
 import json
 
+
 def get_charset(html):
     """
     get charset in html page
@@ -23,5 +24,9 @@ def to_json_string(obj):
 
 def trim(string):
     return string.strip()
+
+
+def d(msg):
+    print(msg)
 
 

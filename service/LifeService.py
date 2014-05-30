@@ -4,11 +4,18 @@ __author__ = 'Jayin Ton'
 import requests
 from bs4 import BeautifulSoup
 import _
+
 """
 knowning problems:
 1.他服务器有防御型，不能频繁请求，不然不行
 """
 
+"""
+to do:
+1.timeout support
+2.管理好错误,异常
+3.失败记录下来
+"""
 
 apart = {
     "34": "1",
@@ -37,12 +44,13 @@ apart = {
 
 
 def _get_electricity_info_html(apart_id, meter_room):
-    """"
-     apartID:栋数
-     meterRoom:宿舍号
+    """get html
+
+    :param apart_id: 栋数
+    :param meter_room: 宿舍号
     """
     if apart.get(apart_id) is None:
-        pass  #error input
+        raise KeyError("not support the apart_id= " + apart_id)
     post_data = {
         "action": "search",
         "apartID": apart.get(apart_id),
@@ -58,19 +66,34 @@ def _get_tag_span(tag):
 
 
 def get_electricity_info(apart_id, meter_room):
+    """get electricity info
+
+    :param apart_id: 栋数
+    :param meter_room: 宿舍号
+    """
     apart_id = str(apart_id)
     meter_room = str(meter_room)
-    content = _get_electricity_info_html(apart_id, meter_room)
+    try:
+        content = _get_electricity_info_html(apart_id, meter_room)
+    except KeyError as e:
+        _.d(e.message)
+        result = {
+            "response": None
+        }
+        return _.to_json_string(result)
     soup = BeautifulSoup(content)
     tags = soup.find_all(name='span', class_='STYLE7')
     result = {
-        'apart': _.trim(tags[0].string),
-        'apart_id':  _.trim(tags[1].string),
-        'used':  _.trim(tags[2].string),
-        'left':  _.trim(tags[3].string),
-        'update_time':  _.trim(tags[4].string)
+        "response": {
+            'apart': _.trim(tags[0].string),
+            'apart_id': _.trim(tags[1].string),
+            'used': _.trim(tags[2].string),
+            'left': _.trim(tags[3].string),
+            'update_time': _.trim(tags[4].string)
+        }
     }
     return _.to_json_string(result)
+
 
 if __name__ == '__main__':
     print get_electricity_info(3, 706)
