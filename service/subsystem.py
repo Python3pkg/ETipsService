@@ -10,7 +10,7 @@ from bs4 import BeautifulSoup
 _headers = None
 
 
-class subSystem(object):
+class SubSystem(object):
     def __init__(self, userid, userpsw):
         self._headers = None
         self._cookies = None
@@ -95,7 +95,7 @@ class subSystem(object):
 
 
 if __name__ == '__main__':
-    u = subSystem("3112002722", '931127')
+    u = SubSystem("3112002722", '931127')
     print u.login()
     if u.login():
         print "****************Login success!**************"

@@ -43,57 +43,58 @@ apart = {
 }
 
 
-def _get_electricity_info_html(apart_id, meter_room):
-    """get html
-
-    :param apart_id: 栋数
-    :param meter_room: 宿舍号
-    """
-    if apart.get(apart_id) is None:
-        raise KeyError("not support the apart_id= " + apart_id)
-    post_data = {
-        "action": "search",
-        "apartID": apart.get(apart_id),
-        "meter_room": apart_id + meter_room
-    }
-    r = requests.post("http://202.192.252.140/index.asp", data=post_data)
-    return r.content.decode(_.get_charset(r.content))
-
-
-def _get_tag_span(tag):
-    if tag.has_attr('class'):
+class LifeService(object):
+    def __init__(self):
         pass
 
+    @staticmethod
+    def _get_electricity_info_html(apart_id, meter_room):
+        """get html
 
-def get_electricity_info(apart_id, meter_room):
-    """get electricity info
+        :param apart_id: 栋数
+        :param meter_room: 宿舍号
+        """
+        if apart.get(apart_id) is None:
+            raise KeyError("not support the apart_id= " + apart_id)
+        post_data = {
+            "action": "search",
+            "apartID": apart.get(apart_id),
+            "meter_room": apart_id + meter_room
+        }
+        r = requests.post("http://202.192.252.140/index.asp", data=post_data)
+        return r.content.decode(_.get_charset(r.content))
 
-    :param apart_id: 栋数
-    :param meter_room: 宿舍号
-    """
-    apart_id = str(apart_id)
-    meter_room = str(meter_room)
-    try:
-        content = _get_electricity_info_html(apart_id, meter_room)
-    except KeyError as e:
-        _.d(e.message)
+    
+    def get_electricity_info(self, apart_id, meter_room):
+        """get electricity info
+
+            :param apart_id: 栋数
+            :param meter_room: 宿舍号
+        """
+        apart_id = str(apart_id)
+        meter_room = str(meter_room)
+        try:
+            content = LifeService._get_electricity_info_html(apart_id, meter_room)
+        except KeyError as e:
+            _.d(e.message)
+            result = {
+                "response": None
+            }
+            return _.to_json_string(result)
+        soup = BeautifulSoup(content)
+        tags = soup.find_all(name='span', class_='STYLE7')
         result = {
-            "response": None
+            "response": {
+                'apart': _.trim(tags[0].string),
+                'apart_id': _.trim(tags[1].string),
+                'used': _.trim(tags[2].string),
+                'left': _.trim(tags[3].string),
+                'update_time': _.trim(tags[4].string)
+            }
         }
         return _.to_json_string(result)
-    soup = BeautifulSoup(content)
-    tags = soup.find_all(name='span', class_='STYLE7')
-    result = {
-        "response": {
-            'apart': _.trim(tags[0].string),
-            'apart_id': _.trim(tags[1].string),
-            'used': _.trim(tags[2].string),
-            'left': _.trim(tags[3].string),
-            'update_time': _.trim(tags[4].string)
-        }
-    }
-    return _.to_json_string(result)
 
 
 if __name__ == '__main__':
-    print get_electricity_info(3, 706)
+    service = LifeService()
+    print service.get_electricity_info(3, 706)
