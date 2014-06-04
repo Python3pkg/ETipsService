@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-#coding=utf-8
+# !/usr/bin/env python
+# coding=utf-8
 __author__ = 'Jayin Ton'
 
 import re
@@ -28,5 +28,10 @@ def trim(string):
 
 def d(msg):
     print(msg)
+
+
+def dump_file(content, filename="tmp.txt"):
+    with open(filename, mode="w") as f:
+        f.write(content)
 
 
