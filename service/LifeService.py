@@ -48,7 +48,7 @@ class LifeService(object):
         pass
 
     @staticmethod
-    def _get_electricity_info_html(apart_id, meter_room):
+    def _get_electricity_info_html( apart_id, meter_room):
         """get html
 
         :param apart_id: 栋数
@@ -64,7 +64,7 @@ class LifeService(object):
         r = requests.post("http://202.192.252.140/index.asp", data=post_data)
         return r.content.decode(_.get_charset(r.content))
 
-    
+
     def get_electricity_info(self, apart_id, meter_room):
         """get electricity info
 

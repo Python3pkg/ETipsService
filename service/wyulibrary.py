@@ -37,7 +37,6 @@ class WyuLibrary(object):
         #_.d(r.content.decode(_.get_charset(r.content)))
         return r.content.decode(_.get_charset(r.content))
 
-
     def search_book(self, anywords):
         result = {
             "response": []

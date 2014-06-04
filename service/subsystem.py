@@ -86,7 +86,17 @@ class SubSystem(object):
         self._headers['Referer'] = "http://jwc.wyu.edu.cn/student/menu.asp"
         r = requests.get("http://jwc.wyu.edu.cn/student/f4_myscore11.asp", headers=self._headers, allow_redirects=False,
                          cookies=self._cookies)
-        print r.content.decode(_.get_charset(r.content))
+        return r.content.decode(_.get_charset(r.content))
+
+    @staticmethod
+    def tag_tables(self):
+        pass
+    def get_score(self):
+        html = self._get_score_html()
+        soup = BeautifulSoup(html)
+        res =soup.find_all()
+
+        print res
 
 
     def _get_stu_info(self):
@@ -100,6 +110,6 @@ if __name__ == '__main__':
     if u.login():
         print "****************Login success!**************"
         print "****************course list**************"
-        print u.get_course()
-        #u._get_score_html()
+        #print u.get_course()
+        print u._get_score_html()
         #u._get_stu_info()
