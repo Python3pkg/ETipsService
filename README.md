@@ -1,5 +1,8 @@
 ETips-Service
-=============
+===
+[![PyPI version](https://badge.fury.io/py/ETipsService.svg)](http://badge.fury.io/py/ETipsService)
+[![Downloads](https://pypip.in/download/ETipsService/badge.png)](https://pypi.python.org/pypi/ETipsService/)
+[![License](https://pypip.in/license/ETipsService/badge.png)](https://pypi.python.org/pypi/ETipsService/)  
 
 web service for ETips
 
