@@ -1,10 +1,10 @@
 ETips-Service
 ===
+[![Build Status](https://travis-ci.org/Jayin/ETipsService.svg?branch=master)](https://travis-ci.org/Jayin/ETipsService)
 [![PyPI version](https://badge.fury.io/py/ETipsService.svg)](http://badge.fury.io/py/ETipsService)
-[![Downloads](https://pypip.in/download/ETipsService/badge.png)](https://pypi.python.org/pypi/ETipsService/)
-[![License](https://pypip.in/license/ETipsService/badge.png)](https://pypi.python.org/pypi/ETipsService/)  
+[![Downloads](https://pypip.in/download/ETipsService/badge.png)](https://pypi.python.org/pypi/ETipsService/)  
 
-web service for ETips
+The web service for ETips
 
 requirement
 ===
