@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-#coding=utf-8
-__author__ = 'Jayin Ton'
+# -*- coding: utf-8 -*-
 
 from . import *

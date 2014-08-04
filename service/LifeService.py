@@ -1,6 +1,5 @@
-#!/usr/bin/env python
-#coding=utf-8
-__author__ = 'Jayin Ton'
+# -*- coding: utf-8 -*-
+
 import requests
 from bs4 import BeautifulSoup
 import _
