@@ -34,7 +34,7 @@ class WyuNews(object):
             return response
         res = WyuNews._wyu_news(page)
         soup = BeautifulSoup(res, from_encoding='utf-8')
-        tag_a = soup.find_all(wyunews._get_tag_a)
+        tag_a = soup.find_all(self._get_tag_a)
         result = []
         for item in tag_a:
             result.append({
@@ -43,8 +43,3 @@ class WyuNews(object):
             })
         response['result'] = result
         return _.to_json_string(response)
-
-
-if __name__ == '__main__':
-    wyunews = WyuNews()
-    print (wyunews.get_wyu_news(1))

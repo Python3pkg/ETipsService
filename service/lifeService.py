@@ -93,7 +93,3 @@ class LifeService(object):
         }
         return _.to_json_string(result)
 
-
-if __name__ == '__main__':
-    service = LifeService()
-    print service.get_electricity_info(3, 706)

@@ -69,9 +69,7 @@ class WyuLibrary(object):
         return result
 
 
-if __name__ == '__main__':
-    lib = WyuLibrary()
-    print lib.search_book("java")
+
 
 
 
