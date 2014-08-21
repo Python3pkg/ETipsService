@@ -58,10 +58,10 @@ class WyuNews(object):
         return tag.get_text().split(u"  ")[2].strip(u' ')
 
     def get_wyu_news(self, page):
-        """get the news lst
+        """获取新闻列表
 
-        :param page:  the page
-        :return:
+        :param page: 页码
+        :return: json
         """
         response = {
             'result': []
@@ -86,10 +86,10 @@ class WyuNews(object):
         return _.to_json_string(response)
 
     def get_news_content(self, url):
-        '''get the content of a news
+        '''获取新闻内容
 
         :param url: 新闻url
-        :return: html
+        :return: html code
         '''
         res = WyuNews.__wyu_news_content(url)
         soup = BeautifulSoup(res, from_encoding='utf-8')
@@ -99,10 +99,4 @@ class WyuNews(object):
         html = u'<html><head><meta charset="utf-8"></head><body><table  align="center" border="0" cellpadding="0" cellspacing="2" width="75%"><tbody>' + \
                tr.decode() + u'</tbody></table></body></html>'
         return html
-
-
-if __name__ == '__main__':
-    a = WyuNews()
-    t = a.get_news_content('http://www.wyu.cn/news/news_zxtz/201481811490835123.htm')
-    print t
 
