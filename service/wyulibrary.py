@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 
 
 class WyuLibrary(object):
-    url_search = "http://lib.wyu.edu.cn/opac/searchresult.aspx"
+    url_search = u"http://lib.wyu.edu.cn/opac/searchresult.aspx"
 
     def __init__(self):
         self._headers = {
@@ -24,15 +24,16 @@ class WyuLibrary(object):
             "sm": "table",
             "dept": "ALL",
             "ecx": "0",
-            "anywords": ""  #not anywords..
+            "anywords": ""  # not anywords..
         }
 
         self._timeout = 20  #
 
     def _search_book_html(self, anywords):
-        self._params['anywords'] = anywords
+        # url要对中文编码..
+        self._params['anywords'] = anywords.decode('utf-8').encode('gbk')
         r = requests.get(url=WyuLibrary.url_search, headers=self._headers, params=self._params, timeout=self._timeout)
-        #_.d(r.content.decode(_.get_charset(r.content)))
+        # _.d(r.content.decode(_.get_charset(r.content)))
         return r.content.decode(_.get_charset(r.content))
 
     def search_book(self, anywords):
@@ -44,7 +45,7 @@ class WyuLibrary(object):
         tds = soup.select(selector="tbody")[0].select("td")
         cursor = 1
         while cursor < len(tds) / 9:
-            s = (cursor - 1) * 9;
+            s = (cursor - 1) * 9
             num = tds[s].get_text()
             name = tds[s + 1].get_text()
             author = tds[s + 2].get_text()
@@ -67,7 +68,6 @@ class WyuLibrary(object):
             result['response'].append(book)
             cursor += 1
         return result
-
 
 
 
