@@ -6,25 +6,25 @@ from bs4 import BeautifulSoup
 
 
 class WyuLibrary(object):
-    url_search = u"http://lib.wyu.edu.cn/opac/searchresult.aspx"
+    url_search = u'http://lib.wyu.edu.cn/opac/searchresult.aspx'
 
     def __init__(self):
         self._headers = {
-            "Host": "lib.wyu.edu.cn",
-            "Referer": "http://lib.wyu.edu.cn/opac/search.aspx",
-            "Accept-Language": ":zh-CN,zh;q=0.8,en;q=0.6,zh-TW;q=0.4"
+            'Host': 'lib.wyu.edu.cn',
+            'Referer': 'http://lib.wyu.edu.cn/opac/search.aspx',
+            'Accept-Language': ':zh-CN,zh;q=0.8,en;q=0.6,zh-TW;q=0.4'
         }
 
         self._params = {
-            "dt": "ALL",
-            "cl": "ALL",
-            "dp": "20",
-            "sf": "M_PUB_YEAR",
-            "ob": "DESC",
-            "sm": "table",
-            "dept": "ALL",
-            "ecx": "0",
-            "anywords": ""  # not anywords..
+            'dt': 'ALL',
+            'cl': 'ALL',
+            'dp': '20',
+            'sf': 'M_PUB_YEAR',
+            'ob': 'DESC',
+            'sm': 'table',
+            'dept': 'ALL',
+            'ecx': '0',
+            'anywords': ''  # not anywords..
         }
 
         self._timeout = 20  #
@@ -38,11 +38,11 @@ class WyuLibrary(object):
 
     def search_book(self, anywords):
         result = {
-            "response": []
+            'response': []
         }
         html = self._search_book_html(anywords)
         soup = BeautifulSoup(html)
-        tds = soup.select(selector="tbody")[0].select("td")
+        tds = soup.select(selector='tbody')[0].select('td')
         cursor = 1
         while cursor < len(tds) / 9:
             s = (cursor - 1) * 9
@@ -56,14 +56,14 @@ class WyuLibrary(object):
             left = tds[s + 7].get_text()
             addtion = tds[s + 8].get_text()
             book = {
-                "name": name,
-                "author": author,
-                "press": press,
-                "press_time": press_time,
-                "index_num": index_num,
-                "total": total,
-                "left": left,
-                "addtion": addtion
+                'name': name,
+                'author': author,
+                'press': press,
+                'press_time': press_time,
+                'index_num': index_num,
+                'total': total,
+                'left': left,
+                'addtion': addtion
             }
             result['response'].append(book)
             cursor += 1

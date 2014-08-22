@@ -86,11 +86,11 @@ class WyuNews(object):
         return _.to_json_string(response)
 
     def get_news_content(self, url):
-        '''获取新闻内容
+        """获取新闻内容
 
         :param url: 新闻url
         :return: html code
-        '''
+        """
         res = WyuNews.__wyu_news_content(url)
         soup = BeautifulSoup(res, from_encoding='utf-8')
         tag_table = soup.find(self.__get_tag_table)

@@ -17,28 +17,28 @@ to do:
 """
 
 apart = {
-    "34": "1",
-    "35": "9",
-    "36": "17",
-    "37": "25",
-    "1": "33",
-    "2": "40",
-    "3": "47",
-    "4": "55",
-    "5": "63",
-    "6": "68",
-    "19": "74",
-    "20": "75",
-    "21": "76",
-    "22": "77",
-    "14": "105",
-    "15": "114",
-    "38": "122",
-    "39": "123",
-    "40": "124",
-    "41": "214",
-    "42": "226",
-    "43": "227"
+    '34': '1',
+    '35': '9',
+    '36': '17',
+    '37': '25',
+    '1': '33',
+    '2': '40',
+    '3': '47',
+    '4': '55',
+    '5': '63',
+    '6': '68',
+    '19': '74',
+    '20': '75',
+    '21': '76',
+    '22': '77',
+    '14': '105',
+    '15': '114',
+    '38': '122',
+    '39': '123',
+    '40': '124',
+    '41': '214',
+    '42': '226',
+    '43': '227'
 }
 
 
@@ -54,13 +54,13 @@ class LifeService(object):
         :param meter_room: 宿舍号
         """
         if apart.get(apart_id) is None:
-            raise KeyError("not support the apart_id= " + apart_id)
+            raise KeyError('not support the apart_id= ' + apart_id)
         post_data = {
-            "action": "search",
-            "apartID": apart.get(apart_id),
-            "meter_room": apart_id + meter_room
+            'action': 'search',
+            'apartID': apart.get(apart_id),
+            'meter_room': apart_id + meter_room
         }
-        r = requests.post("http://202.192.252.140/index.asp", data=post_data)
+        r = requests.post('http://202.192.252.140/index.asp', data=post_data)
         return r.content.decode(_.get_charset(r.content))
 
 
@@ -77,13 +77,13 @@ class LifeService(object):
         except KeyError as e:
             _.d(e.message)
             result = {
-                "response": None
+                'response': None
             }
             return _.to_json_string(result)
         soup = BeautifulSoup(content)
         tags = soup.find_all(name='span', class_='STYLE7')
         result = {
-            "response": {
+            'response': {
                 'apart': _.trim(tags[0].string),
                 'apart_id': _.trim(tags[1].string),
                 'used': _.trim(tags[2].string),

@@ -28,8 +28,8 @@ def d(msg):
     print(msg)
 
 
-def dump_file(content, filename="tmp.txt"):
-    with open(filename, mode="w") as f:
+def dump_file(content, filename='tmp.txt'):
+    with open(filename, mode='w') as f:
         f.write(content)
 
 
