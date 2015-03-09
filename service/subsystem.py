@@ -56,27 +56,37 @@ class SubSystem(object):
         result = {
             'course': []
         }
-        for x in tbodys[1].select('td[valign=top]'):
-            # print x.getText(separator=u' ')
-            texts = x.getText(separator=u' ').split(u' ')
-            # have no lesson
-            if len(texts) == 1:
+
+        day = 0
+        for index, x in enumerate(tbodys[1].select('td[valign=top]')):  # 遍历每一节课
+            # print '->' + x.getText(separator=u' ')
+            texts = x.getText(separator=u' ').split(u' ') # 切割为3部分:[0]课名 [1]上课时间 [2]地点+任课老师
+
+            day = (day + 1) % 7 if (day + 1) % 7 != 0 else 7  # 周几
+            time = (index + 1) / 7 + 1 if (index + 1) % 7 != 0 else (index + 1) / 7  # 第几节课程
+
+            if len(texts) == 1:  # have no lesson
                 lesson = {
                     'name': u'',
                     'time': u'',
                     'address': u'',
-                    'teacher': u''
+                    'teacher': u'',
+                    'day': day,
+                    'time': time
                 }
+                result['course'].append(lesson)
             else:
-                lesson = {
-                    'name': texts[0],
-                    'time': texts[1],
-                    'address': texts[2].split(u' ')[0],
-                    'teacher': texts[2].split(u' ')[1]
-                }
-            # print lesson
-            result['course'].append(lesson)
-
+                # 有1节或以上的课程
+                for i in range(0, len(texts) / 3):
+                    lesson = {
+                        'name': texts[i * 3],
+                        'time': texts[i * 3 + 1],
+                        'address': texts[i * 3 + 2].split(u' ')[0],
+                        'teacher': texts[i * 3 + 2].split(u' ')[1],
+                        'day': day,
+                        'time': time
+                    }
+                    result['course'].append(lesson)
         return _.to_json_string(result)
 
     def _get_score_html(self):
