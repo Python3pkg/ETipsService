@@ -14,9 +14,10 @@ class SubSystem(object):
         self._userid = userid
         self._userpsw = userpsw
 
-    def _get_rndnum_cookies(self):
+    def __get_rndnum_cookies(self):
         """
-        get the randomNumber
+        获得随机验证从而生成cookie
+        :return: cookie
         """
         r = requests.get('http://jwc.wyu.edu.cn/student/rndnum.asp')
         # print r.cookies['ASPSESSIONIDSCRRDTBQ']
@@ -24,7 +25,11 @@ class SubSystem(object):
         return r.cookies
 
     def login(self):
-        self._cookies = self._get_rndnum_cookies()
+        """
+        用户登陆
+        :return: true if login successfully
+        """
+        self._cookies = self.__get_rndnum_cookies()
         # print self._cookies
         UserCode, UserPwd = self._userid, self._userpsw
         Validate = self._cookies['LogonNumber']
@@ -43,24 +48,30 @@ class SubSystem(object):
         # print r.content.decode(_.get_charset(r.content))
         return True if r.status_code == 200 else False
 
-    def _get_course_html(self):
+    def __get_course_html(self):
+        """
+        获得课表页面
+        :return: 已转码的html
+        """
         self._headers['Referer'] = 'http://jwc.wyu.edu.cn/student/menu.asp'
         r = requests.get('http://jwc.wyu.edu.cn/student/f3.asp', headers=self._headers, cookies=self._cookies)
         return r.content.decode(_.get_charset(r.content))
 
     def get_course(self):
-        html = self._get_course_html()
+        """
+        获得课表
+        :return: 课表
+        """
+        html = self.__get_course_html()
         soup = BeautifulSoup(markup=html)
         # tbodys[0]为学生信息，tbodys[1]课表，tbodys[2]为课程详情
         tbodys = soup.find_all(name='tbody')
-        result = {
-            'course': []
-        }
+        result = []
 
         day = 0
         for index, x in enumerate(tbodys[1].select('td[valign=top]')):  # 遍历每一节课
             # print '->' + x.getText(separator=u' ')
-            texts = x.getText(separator=u' ').split(u' ') # 切割为3部分:[0]课名 [1]上课时间 [2]地点+任课老师
+            texts = x.getText(separator=u' ').split(u' ')  # 切割为3部分:[0]课名 [1]上课时间 [2]地点+任课老师
 
             day = (day + 1) % 7 if (day + 1) % 7 != 0 else 7  # 周几
             time = (index + 1) / 7 + 1 if (index + 1) % 7 != 0 else (index + 1) / 7  # 第几节课程
@@ -74,7 +85,7 @@ class SubSystem(object):
                     'day': day,
                     'time': time
                 }
-                result['course'].append(lesson)
+                result.append(lesson)
             else:
                 # 有1节或以上的课程
                 for i in range(0, len(texts) / 3):
@@ -86,30 +97,37 @@ class SubSystem(object):
                         'day': day,
                         'time': time
                     }
-                    result['course'].append(lesson)
+                    result.append(lesson)
         return _.to_json_string(result)
 
-    def _get_score_html(self):
+    def __get_score_html(self):
         self._headers['Referer'] = 'http://jwc.wyu.edu.cn/student/menu.asp'
         r = requests.get('http://jwc.wyu.edu.cn/student/f4_myscore11.asp', headers=self._headers, allow_redirects=False,
                          cookies=self._cookies)
         return r.content.decode(_.get_charset(r.content))
 
-    # 获取每列信息，除去首行（课程代号..）
-    def get_td(self, tag):
+
+    def __get_td(self, tag):
+        """
+        用于获取每列信息，除去首行（课程代号..）
+        :param tag: 标签
+        :return: 匹配时返回true
+        """
         if tag.name == 'td' and not 'background' in tag.get('style'):
             return True
         return False
 
     def get_score(self):
-        html = self._get_score_html()
+        """
+        获得成绩列表
+        :return: json array
+        """
+        html = self.__get_score_html()
         soup = BeautifulSoup(html)
         div = soup.find_all('div', class_='Section1')[0]
         tag_ps = div.find_all('p')
         del tag_ps[0]
-        result = {
-            'response': []
-        }
+        result = []
         '''
         #one object
         {
@@ -139,14 +157,12 @@ class SubSystem(object):
                     'year': year_num,
                     'score_list': []
                 }
-
                 # 遍历每一列
                 for tr in trs:
-                    tds = tr.find_all(self.get_td)
+                    tds = tr.find_all(self.__get_td)
                     if len(tds) == 0:
                         continue
                     lesson_info = {
-
                         'id': _.trim(tds[0].get_text()),
                         'name': _.trim(tds[1].get_text()),
                         'type': _.trim(tds[2].get_text()),
@@ -157,11 +173,10 @@ class SubSystem(object):
 
                     tern_info['score_list'].append(lesson_info)
                 year_num += 1
-                result['response'].append(tern_info)
+                result.append(tern_info)
             except Exception as e:
                 _.d(e.message)
-        # print result
-        return result
+        return _.to_json_string(result)
 
     def _get_stu_info(self):
         r = requests.get('http://jwc.wyu.edu.cn/student/f1.asp', headers=self._headers, cookies=self._cookies)
