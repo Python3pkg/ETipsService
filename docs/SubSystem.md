@@ -6,8 +6,10 @@
 ```python
 from service.subsystem import SubSystem
 
-u = SubSystem("3112002722", '931127')
-u.get_course()
+u = SubSystem("3112002722", 'xxxx')
+if u.login():
+    print u.get_course()
+
 ```
 
 **Return**
@@ -57,8 +59,9 @@ u.get_course()
 ```python
 from service.subsystem import SubSystem
 
-u = SubSystem("3112002722", '931127')
-u._get_stu_info()
+u = SubSystem("3112002722", 'xxxx')
+if u.login():
+    print u.get_score()
 ```
 
 **Return**
