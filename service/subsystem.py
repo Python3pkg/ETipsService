@@ -98,7 +98,7 @@ class SubSystem(object):
                         'time': time
                     }
                     result.append(lesson)
-        return _.to_json_string(result)
+        return result
 
     def __get_score_html(self):
         self._headers['Referer'] = 'http://jwc.wyu.edu.cn/student/menu.asp'
@@ -176,7 +176,7 @@ class SubSystem(object):
                 result.append(tern_info)
             except Exception as e:
                 _.d(e.message)
-        return _.to_json_string(result)
+        return result
 
     def _get_stu_info(self):
         r = requests.get('http://jwc.wyu.edu.cn/student/f1.asp', headers=self._headers, cookies=self._cookies)

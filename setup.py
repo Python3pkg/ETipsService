@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 setup(
     name='ETipsService',
     packages=find_packages(),
-    version="1.0.2",
+    version="1.0.3",
     description="service lib for ETips",
     author="Jayin Ton",
     author_email="tonjayin@gmail.com",
