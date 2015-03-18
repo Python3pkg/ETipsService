@@ -41,7 +41,13 @@ class WyuNews(object):
     def __wyu_news_content(url):
         r = requests.get(url)
         encoding = _.get_charset(r.content)
-        return r.content.decode(encoding)
+        try:
+            return r.content.decode(encoding)
+        except Exception as e:
+            # gb2312不行就换成gbk尝试
+            if encoding != 'gbk':
+                return r.content.decode('gbk')
+            return r.content
 
     @staticmethod
     def __get_news_type(tag):
