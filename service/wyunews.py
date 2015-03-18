@@ -61,11 +61,8 @@ class WyuNews(object):
         :param page: 页码
         :return: json
         """
-        response = {
-            'result': []
-        }
         if page <= 0:
-            return response
+            return []
         res = WyuNews.__wyu_news(page)
         soup = BeautifulSoup(res, from_encoding='utf-8')
         tag_a = soup.find_all(self.__get_tag_a)
@@ -80,8 +77,7 @@ class WyuNews(object):
                 , 'from': self.__get_news_from(tag_td[index])
                 , 'posttime': self.__get_news_posttime(tag_td[index])
             })
-        response['result'] = result
-        return response
+        return result
 
     def get_news_content(self, url):
         """获取新闻内容
