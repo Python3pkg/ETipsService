@@ -6,8 +6,6 @@ import _
 
 
 class WyuNews(object):
-    def __init__(self):
-        pass
 
     @staticmethod
     def __get_tag_a(tag):
@@ -83,7 +81,7 @@ class WyuNews(object):
                 , 'posttime': self.__get_news_posttime(tag_td[index])
             })
         response['result'] = result
-        return _.to_json_string(response)
+        return response
 
     def get_news_content(self, url):
         """获取新闻内容
@@ -96,7 +94,5 @@ class WyuNews(object):
         tag_table = soup.find(self.__get_tag_table)
 
         tr = tag_table.findAll('tr')[4]
-        html = u'<html><head><meta charset="utf-8"></head><body><table  align="center" border="0" cellpadding="0" cellspacing="2" width="75%"><tbody>' + \
-               tr.decode() + u'</tbody></table></body></html>'
-        return html
 
+        return tr.decode()
