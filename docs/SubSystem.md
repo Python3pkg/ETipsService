@@ -3,6 +3,8 @@
 
 ### 获得用户课表
 
+**example**
+
 ```python
 from service.subsystem import SubSystem
 
@@ -55,6 +57,8 @@ if u.login():
 
 
 ### 获取用户的成绩列表
+
+**example**
 
 ```python
 from service.subsystem import SubSystem

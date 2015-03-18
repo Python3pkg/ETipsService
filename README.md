@@ -7,15 +7,18 @@ ETips-Service
 The web service for ETips
 
 requirement
-===
-```shell
+--------
 
+* python 2.7.x
+
+```shell
 pip install BeautifulSoup4
 pip install requests
 ```
 
 To-do
-===
+-----
+
 - [ ] 规范化测试，添加测试样例
 - [ ] +图书详情接口
 - [ ] +图书评论/获取评论(来自豆瓣)
@@ -24,7 +27,8 @@ To-do
 
 
 License
-===
+-----
+
 ```
 Copyright 2014 Jayin Ton
 
