@@ -2,7 +2,7 @@
 
 import requests
 from bs4 import BeautifulSoup
-import _
+from . import _
 
 
 class WyuNews(object):
@@ -51,15 +51,15 @@ class WyuNews(object):
 
     @staticmethod
     def __get_news_type(tag):
-        return tag.get_text().split(u"  ")[0].lstrip(u'【').rstrip(u'】')
+        return tag.get_text().split("  ")[0].lstrip('【').rstrip('】')
 
     @staticmethod
     def __get_news_from(tag):
-        return tag.get_text().split(u"  ")[1].lstrip(u' ').rstrip(u' ')
+        return tag.get_text().split("  ")[1].lstrip(' ').rstrip(' ')
 
     @staticmethod
     def __get_news_posttime(tag):
-        return tag.get_text().split(u"  ")[2].strip(u' ')
+        return tag.get_text().split("  ")[2].strip(' ')
 
     def get_wyu_news(self, page):
         """获取新闻列表

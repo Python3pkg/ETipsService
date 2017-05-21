@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import _
+from . import _
 import requests
 from bs4 import BeautifulSoup
 
@@ -71,17 +71,17 @@ class SubSystem(object):
         day = 0
         for index, x in enumerate(tbodys[1].select('td[valign=top]')):  # 遍历每一节课
             # print '->' + x.getText(separator=u' ')
-            texts = x.getText(separator=u' ').split(u' ')  # 切割为3部分:[0]课名 [1]上课时间 [2]地点+任课老师
+            texts = x.getText(separator=' ').split(' ')  # 切割为3部分:[0]课名 [1]上课时间 [2]地点+任课老师
 
             day = (day + 1) % 7 if (day + 1) % 7 != 0 else 7  # 周几
             time = (index + 1) / 7 + 1 if (index + 1) % 7 != 0 else (index + 1) / 7  # 第几节课程
 
             if len(texts) == 1:  # have no lesson
                 lesson = {
-                    'name': u'',
-                    'time': u'',
-                    'address': u'',
-                    'teacher': u'',
+                    'name': '',
+                    'time': '',
+                    'address': '',
+                    'teacher': '',
                     'day': day,
                     'time': time
                 }
@@ -92,8 +92,8 @@ class SubSystem(object):
                     lesson = {
                         'name': texts[i * 3],
                         'time': texts[i * 3 + 1],
-                        'address': texts[i * 3 + 2].split(u' ')[0],
-                        'teacher': texts[i * 3 + 2].split(u' ')[1],
+                        'address': texts[i * 3 + 2].split(' ')[0],
+                        'teacher': texts[i * 3 + 2].split(' ')[1],
                         'day': day,
                         'time': time
                     }
@@ -180,4 +180,4 @@ class SubSystem(object):
 
     def _get_stu_info(self):
         r = requests.get('http://jwc.wyu.edu.cn/student/f1.asp', headers=self._headers, cookies=self._cookies)
-        print r.content.decode(_.get_charset(r.content))
+        print(r.content.decode(_.get_charset(r.content)))

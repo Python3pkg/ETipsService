@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import requests
-import _
+from . import _
 from bs4 import BeautifulSoup
 
 
 class WyuLibrary(object):
-    url_search = u'http://lib.wyu.edu.cn/opac/searchresult.aspx'
-    url_book_info = u'http://lib.wyu.edu.cn/opac/bookinfo.aspx'
+    url_search = 'http://lib.wyu.edu.cn/opac/searchresult.aspx'
+    url_book_info = 'http://lib.wyu.edu.cn/opac/bookinfo.aspx'
 
     def __init__(self):
         self._timeout = 20  #
